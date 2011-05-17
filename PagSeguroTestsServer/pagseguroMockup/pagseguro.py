@@ -47,7 +47,7 @@ def process(path,data):
   '''Imita o PagSeguro'''
   global retornourl
   url=retornourl
-  if path.lower()=='/security/webpagamentos/webpagto.aspx':
+  if path.lower()=='/checkout/checkout.jhtml':
     titulo='Pagamento processado.'
     dump='\n'.join(sorted(['%s="%s"' % (k,'","'.join(v)) for k,v in data.iteritems()]))
     transid=md5.new(str(random.random())).hexdigest()
