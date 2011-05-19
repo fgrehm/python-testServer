@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*- 
-import random,md5
+import random,hashlib
 from datetime import datetime
 from settings import retornourl
 
@@ -50,7 +50,7 @@ def process(path,data):
   if path.lower()=='/checkout/checkout.jhtml':
     titulo='Pagamento processado.'
     dump='\n'.join(sorted(['%s="%s"' % (k,'","'.join(v)) for k,v in data.iteritems()]))
-    transid=md5.new(str(random.random())).hexdigest()
+    transid=hashlib.md5(str(random.random())).hexdigest()
     prods=[i for i in data if i.startswith('item_id')]
     datamap={
       'TransacaoID':    transid,
@@ -60,10 +60,10 @@ def process(path,data):
       'DataTransacao':  datetime.now().strftime('%d/%m/%Y %H:%M:%S'),
       'ValorFrete':     '0,00',
       'VendedorEmail':  'email_cobranca',
-      'Referencia':     ''.join(data['ref_transacao']), #'ref_transacao',
+      'Referencia':     ''.join(data['ref_transacao']),
       'CliNome':        'nome',
       'CliEmail':       'email',
-      'CliEndereco':    'Rua dos Bobos',
+      'CliEndereco':    'Rua que sobe e desce',
       'CliNumero':      '0',
       'CliComplemento': '',
       'CliBairro':      'Paytown',
@@ -74,10 +74,10 @@ def process(path,data):
       'NumItens':       len(prods),
     }
     proddatamap={
-      'ProdId':'item_id',
+      'ProdID':'item_id',
       'ProdDescricao':'item_descr',
       'ProdQuantidade':'item_quant',
-      'ProdFrete':'0,00',
+      'ProdFrete':'item_frete',
       'ProdExtras':'0,00',
       'ProdValor':'item_valor',
     }
