@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*- 
+# -*- encoding: utf-8 -*-
 import random,hashlib
 from datetime import datetime
 from settings import retornourl
@@ -47,7 +47,7 @@ def process(path,data):
   '''Imita o PagSeguro'''
   global retornourl
   url=retornourl
-  if path.lower()=='/checkout/checkout.jhtml':
+  if path.lower()=='/checkout/checkout.jhtml' or path.lower()=='/security/webpagamentos/webpagto.aspx':
     titulo='Pagamento processado.'
     dump='\n'.join(sorted(['%s="%s"' % (k,'","'.join(v)) for k,v in data.iteritems()]))
     transid=hashlib.md5(str(random.random())).hexdigest()
