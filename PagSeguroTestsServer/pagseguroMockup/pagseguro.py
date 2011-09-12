@@ -83,7 +83,7 @@ def process(path,data):
     }
     formdump=''.join([input(k,get(k,data,v)) for k,v in datamap.iteritems()])
     for i in filter(lambda a:'valor' in a,data):
-      data[i][0]=("%.2f" % (int(data[i][0])/100.0)).replace(".",",")
+      data[i][0]=("%.2f" % (float(data[i][0])/100.0)).replace(".",",")
     for prod in prods:
       prod_id=prod.replace('item_id','')
       for k,v in proddatamap.iteritems():
