@@ -1,22 +1,10 @@
-# -*- encoding: utf-8 -*- 
+# -*- encoding: utf-8 -*-
 '''Servidor de teste para o PagSeguro.'''
-import socket, os, cgi
-from SocketServer import BaseServer
-from BaseHTTPServer import HTTPServer,BaseHTTPRequestHandler
-from SimpleHTTPServer import SimpleHTTPRequestHandler
-from OpenSSL import SSL
+import socket, cgi
+import ssl
+import BaseHTTPServer
 
-class SecureHTTPServer(HTTPServer):
-    '''Servidor HTTPS com OpenSSL.'''
-    def __init__(self, server_address, HandlerClass,fpem):
-        BaseServer.__init__(self, server_address, HandlerClass)
-        ctx = SSL.Context(SSL.SSLv23_METHOD)
-        ctx.use_privatekey_file (fpem)
-        ctx.use_certificate_file(fpem)
-        self.socket = SSL.Connection(ctx, socket.socket(self.address_family,
-                                                        self.socket_type))
-        self.server_bind()
-        self.server_activate()
+from BaseHTTPServer import BaseHTTPRequestHandler
 
 class HTTPSHandler(BaseHTTPRequestHandler):
 
@@ -52,11 +40,12 @@ class HTTPSHandler(BaseHTTPRequestHandler):
 #the server certificate).
 fpem = 'server.pem'
 
-def run(HandlerClass = HTTPSHandler,
-         ServerClass = SecureHTTPServer):
-    '''Roda o servidor'''
-    server_address = ('', 443) # (address, port)
-    httpd = ServerClass(server_address, HandlerClass, fpem)
+def run(HandlerClass = HTTPSHandler):#, ServerClass = SecureHTTPServer):
+
+    # Customização do servidor baseado em:
+    #   http://www.piware.de/2011/01/creating-an-https-server-in-python/
+    httpd = BaseHTTPServer.HTTPServer(('', 443), HandlerClass)
+    httpd.socket = ssl.wrap_socket(httpd.socket, certfile=fpem, server_side=True)
     httpd.serve_forever()
 
 if __name__ == '__main__':

@@ -6,6 +6,6 @@ class PagSeguroHandler(HTTPSHandler):
     return pagseguro.process(self.path,self.data)
 
 if __name__=="__main__":
-  run(PagSeguroHandler,SecureHTTPServer)
+  run(PagSeguroHandler)
 
 
